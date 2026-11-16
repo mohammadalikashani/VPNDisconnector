@@ -1,0 +1,25 @@
+:root { color-scheme: light dark; --accent: #d97706; --ok: #16a34a; --bad: #dc2626; --muted: #888; }
+body { font: 13px system-ui, sans-serif; width: 320px; margin: 0; padding: 12px; }
+header { display: flex; align-items: center; justify-content: space-between; }
+h1 { font-size: 15px; margin: 0; }
+h2 { font-size: 12px; text-transform: uppercase; color: var(--muted); margin: 14px 0 6px; }
+.status { margin-top: 10px; padding: 6px 8px; border-radius: 6px; font-size: 12px; background: #8881; }
+.status.ok { color: var(--ok); } .status.bad { color: var(--bad); }
+#current { margin-top: 12px; padding: 10px; border: 1px solid #8884; border-radius: 8px; }
+.host { font-weight: 600; margin-bottom: 8px; word-break: break-all; }
+button { cursor: pointer; border: 1px solid #8886; border-radius: 6px; padding: 6px 10px; background: transparent; color: inherit; }
+#toggleSite { width: 100%; padding: 8px; font-weight: 600; }
+#toggleSite.add { background: var(--accent); color: #fff; border-color: var(--accent); }
+form { display: flex; gap: 6px; }
+input:not([type]), input[type=number] { flex: 1; padding: 6px; border: 1px solid #8886; border-radius: 6px; background: transparent; color: inherit; }
+ul { list-style: none; padding: 0; margin: 8px 0 0; max-height: 180px; overflow-y: auto; }
+li { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #8882; }
+li button { padding: 2px 8px; }
+.hint { color: var(--muted); font-size: 12px; }
+details { margin-top: 12px; } summary { cursor: pointer; color: var(--muted); }
+details label { display: flex; gap: 6px; align-items: center; margin-top: 8px; }
+.switch input { display: none; }
+.switch span { display: inline-block; width: 34px; height: 18px; border-radius: 9px; background: #8886; position: relative; cursor: pointer; }
+.switch span::after { content: ""; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: left .15s; }
+.switch input:checked + span { background: var(--accent); }
+.switch input:checked + span::after { left: 18px; }

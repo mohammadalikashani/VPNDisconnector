@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <h1>VPN Disconnector</h1>
+    <label class="switch" title="Turn the extension on/off">
+      <input type="checkbox" id="enabled"><span></span>
+    </label>
+  </header>
+
+  <div id="helper" class="status">Checking helper…</div>
+
+  <section id="current" hidden>
+    <div class="host" id="host"></div>
+    <button id="toggleSite"></button>
+  </section>
+
+  <section>
+    <h2>Sites that skip the VPN</h2>
+    <form id="addForm">
+      <input id="newDomain" placeholder="example.com" autocomplete="off">
+      <button type="submit">Add</button>
+    </form>
+    <ul id="list"></ul>
+    <p class="hint" id="empty">No sites yet. Subdomains are included automatically.</p>
+  </section>
+
+  <details>
+    <summary>Settings</summary>
+    <label>Helper port <input id="port" type="number" min="1" max="65535"></label>
+    <label class="row"><input id="failOpen" type="checkbox">
+      If the helper is not running, load bypassed sites through the VPN anyway</label>
+  </details>
+
+  <script src="popup.js"></script>
+</body>
+</html>
