@@ -9,6 +9,7 @@ h2 { font-size: 12px; text-transform: uppercase; color: var(--muted); margin: 14
 .host { font-weight: 600; margin-bottom: 8px; word-break: break-all; }
 button { cursor: pointer; border: 1px solid #8886; border-radius: 6px; padding: 6px 10px; background: transparent; color: inherit; }
 #toggleSite { width: 100%; padding: 8px; font-weight: 600; }
+#toggleSite:disabled { cursor: default; opacity: .7; }
 #toggleSite.add { background: var(--accent); color: #fff; border-color: var(--accent); }
 form { display: flex; gap: 6px; }
 input:not([type]), input[type=number] { flex: 1; padding: 6px; border: 1px solid #8886; border-radius: 6px; background: transparent; color: inherit; }

@@ -2,13 +2,16 @@
 // Routes the domains you choose through the local helper (127.0.0.1:<port>),
 // which sends them out via Wi-Fi/Ethernet instead of the VPN tunnel.
 
-const DEFAULTS = { enabled: true, domains: [], port: 8899, failOpen: true };
+const DEFAULTS = { enabled: true, domains: [], port: 8899, failOpen: true, skipIr: false };
 
 async function getSettings() {
-  return { ...DEFAULTS, ...(await chrome.storage.sync.get(DEFAULTS)) };
+  const s = { ...DEFAULTS, ...(await chrome.storage.sync.get(DEFAULTS)) };
+  // "ir" as a rule matches every .ir domain (example.ir, sub.example.co.ir, ...).
+  s.activeDomains = s.skipIr ? [...new Set([...s.domains, "ir"])] : s.domains;
+  return s;
 }
 
-function buildPac({ domains, port, failOpen }) {
+function buildPac({ activeDomains: domains, port, failOpen }) {
   const proxy = `PROXY 127.0.0.1:${port}` + (failOpen ? "; DIRECT" : "");
   return `
     var DOMAINS = ${JSON.stringify(domains)};
@@ -24,7 +27,7 @@ function buildPac({ domains, port, failOpen }) {
 
 async function applyProxy() {
   const s = await getSettings();
-  if (!s.enabled || s.domains.length === 0) {
+  if (!s.enabled || s.activeDomains.length === 0) {
     await chrome.proxy.settings.clear({ scope: "regular" });
   } else {
     await chrome.proxy.settings.set({
@@ -45,7 +48,7 @@ async function updateBadge(tab) {
   const s = await getSettings();
   let host = "";
   try { host = new URL(tab.url).hostname; } catch {}
-  const bypassed = s.enabled && matches(host, s.domains);
+  const bypassed = s.enabled && matches(host, s.activeDomains);
   await chrome.action.setBadgeText({ tabId: tab.id, text: bypassed ? "OFF" : "" });
   await chrome.action.setBadgeBackgroundColor({ tabId: tab.id, color: "#d97706" });
   await chrome.action.setTitle({

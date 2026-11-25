@@ -75,6 +75,8 @@ python3 helper/bypass_proxy.py
 
 You can also add or remove domains by hand in the popup. Adding `example.com` also covers `www.example.com`, `api.example.com`, and other subdomains.
 
+To send every `.ir` website around the VPN, open **Settings** in the popup and check **Skip the VPN for all .ir domains automatically**. Uncheck it to send `.ir` sites through the VPN again. Sites on your own list are not affected.
+
 To check that it works, add `ipify.org` to the list and open <https://api.ipify.org>. It should show your real IP, not the VPN's.
 
 ## Troubleshooting

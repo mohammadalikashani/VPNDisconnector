@@ -1,4 +1,4 @@
-const DEFAULTS = { enabled: true, domains: [], port: 8899, failOpen: true };
+const DEFAULTS = { enabled: true, domains: [], port: 8899, failOpen: true, skipIr: false };
 const $ = (id) => document.getElementById(id);
 
 let settings = { ...DEFAULTS };
@@ -16,6 +16,10 @@ function matchedRule(h) {
   return settings.domains.find((d) => h === d || h.endsWith("." + d));
 }
 
+function isIrHost(h) {
+  return h === "ir" || h.endsWith(".ir");
+}
+
 async function save(patch, reloadTab = false) {
   settings = { ...settings, ...patch };
   await chrome.storage.sync.set(settings);
@@ -28,14 +32,19 @@ function render() {
   $("enabled").checked = settings.enabled;
   $("port").value = settings.port;
   $("failOpen").checked = settings.failOpen;
+  $("skipIr").checked = settings.skipIr;
 
   if (host) {
     $("current").hidden = false;
     $("host").textContent = host;
     const rule = matchedRule(host);
     const btn = $("toggleSite");
-    btn.textContent = rule ? `Use VPN again (remove ${rule})` : "Skip VPN for this site";
-    btn.className = rule ? "" : "add";
+    const autoIr = settings.skipIr && isIrHost(host) && !rule;
+    btn.disabled = autoIr;
+    btn.textContent = autoIr
+      ? "Skipped automatically (.ir domains)"
+      : rule ? `Use VPN again (remove ${rule})` : "Skip VPN for this site";
+    btn.className = rule || autoIr ? "" : "add";
   }
 
   const list = $("list");
@@ -79,6 +88,7 @@ async function init() {
 
   $("enabled").onchange = (e) => save({ enabled: e.target.checked }, true);
   $("failOpen").onchange = (e) => save({ failOpen: e.target.checked });
+  $("skipIr").onchange = (e) => save({ skipIr: e.target.checked }, isIrHost(host));
   $("port").onchange = (e) => {
     const p = parseInt(e.target.value, 10);
     if (p > 0 && p < 65536) save({ port: p }).then(checkHelper);
