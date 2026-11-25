@@ -75,9 +75,17 @@ python3 helper/bypass_proxy.py
 
 You can also add or remove domains by hand in the popup. Adding `example.com` also covers `www.example.com`, `api.example.com`, and other subdomains.
 
-To send every `.ir` website around the VPN, open **Settings** in the popup and check **Skip the VPN for all .ir domains automatically**. Uncheck it to send `.ir` sites through the VPN again. Sites on your own list are not affected.
-
 To check that it works, add `ipify.org` to the list and open <https://api.ipify.org>. It should show your real IP, not the VPN's.
+
+### Settings
+
+Click **Settings** at the bottom of the popup to change these:
+
+| Setting | Default | What it does |
+|---|---|---|
+| **Helper port** | `8899` | The port the helper listens on. Change it only if you start the helper with `--port`. |
+| **If the helper is not running, load bypassed sites through the VPN anyway** | On | When the helper is stopped, sites on your list still load, through the VPN. Turn it off to block them instead, so they never load through the VPN by mistake. |
+| **Skip the VPN for all .ir domains automatically** | Off | Every `.ir` website and its subdomains (for example `example.ir` and `shop.example.co.ir`) skips the VPN without being added to your list. The **Skip VPN for this site** button on those sites reads **Skipped automatically (.ir domains)**. Turn it off to send `.ir` sites through the VPN again. Sites on your own list are not affected. |
 
 ## Troubleshooting
 
@@ -88,6 +96,7 @@ To check that it works, add `ipify.org` to the list and open <https://api.ipify.
 | Bypassed sites don't load at all | The VPN's **kill switch** may block all traffic outside the tunnel. Turn it off. |
 | Helper picks the wrong network | Choose it yourself: `python3 helper/bypass_proxy.py --interface en0` |
 | Port 8899 is already in use | Run the helper with `--port 9000` (or `PORT=9000 ./helper/install.sh`), and set the same port under **Settings** in the popup. |
+| A `.ir` site skips the VPN but isn't on your list | **Skip the VPN for all .ir domains automatically** is on. Turn it off under **Settings** to send `.ir` sites through the VPN. |
 | Conflicts with another proxy extension | Only one extension can control Chrome's proxy at a time. Turn off other proxy or VPN browser extensions. |
 
 Helper logs (when installed with `install.sh`): `~/Library/Logs/vpn-disconnector.log`
@@ -106,7 +115,7 @@ Then remove the extension in `chrome://extensions`.
 - The helper only listens on `127.0.0.1`, so nothing outside your computer can reach it.
 - No analytics, no telemetry, no outside servers.
 
-**Note:** traffic for sites on your list does **not** go through the VPN. Your internet provider and those websites will see your real IP address for them.
+**Note:** traffic for sites on your list, and for all `.ir` sites when that setting is on, does **not** go through the VPN. Your internet provider and those websites will see your real IP address for them.
 
 ## Development
 
